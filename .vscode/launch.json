@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "args": [],
+            "cwd": "${workspaceFolder:build-plugin-start}",
+            "name": "Debug my-code-generator",
+            "program": "${workspaceFolder:build-plugin-start}/.build/debug/my-code-generator",
+            "preLaunchTask": "swift: Build Debug my-code-generator"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "args": [],
+            "cwd": "${workspaceFolder:build-plugin-start}",
+            "name": "Release my-code-generator",
+            "program": "${workspaceFolder:build-plugin-start}/.build/release/my-code-generator",
+            "preLaunchTask": "swift: Build Release my-code-generator"
+        }
+    ]
+}
