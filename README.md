@@ -4,4 +4,4 @@ See https://www.whynotestflight.com/excuses/what-if-instead-of-a-cli-plugins-par
 
 
 Companion CLI:
-https://github.com/carlynorama/BuildPluginExample/
+https://github.com/carlynorama/BuildPluginExampleTarget/
