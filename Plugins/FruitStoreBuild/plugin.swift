@@ -68,23 +68,15 @@ func filesFromDirectory(path providedPath:Path, shallow:Bool = true) throws -> [
             providedPath.appending([fileName])
         }
     } else {
-        
         let dataDirectoryURL = URL(fileURLWithPath: providedPath.string, isDirectory: true)
-        var allFiles = [URL]()
-        if let enumerator = FileManager.default.enumerator(at: dataDirectoryURL, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
-            for case let fileURL as URL in enumerator {
-                do {
-                    let fileAttributes = try fileURL.resourceValues(forKeys:[.isRegularFileKey])
-                    if fileAttributes.isRegularFile! {
-                        allFiles.append(fileURL)
-                    }
-                } catch { print(error, fileURL) }
+        var allFiles = [Path?]()
+        let enumerator = FileManager.default.enumerator(at: dataDirectoryURL, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants])
+        
+        while let fileURL = enumerator?.nextObject() as? URL {
+            if let regularFileCheck = try fileURL.resourceValues(forKeys:[.isRegularFileKey]).isRegularFile, regularFileCheck == true {
+                allFiles.append((Path(fileURL.path())))
             }
-            return allFiles.map({ Path($0.path()) })
         }
+        return allFiles.compactMap({$0})
     }
-    
-    // Get all the files in that directory, shallow. Just the files. No directories or contents of directories.
-    return []
-    
 }
