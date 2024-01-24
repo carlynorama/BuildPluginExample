@@ -12,7 +12,7 @@ struct FruitStoreBuild: BuildToolPlugin {
         // Still ensures that the target is a source module.
         guard let target = target as? SourceModuleTarget else { return [] }
 
-        let filesToProcess = try filesFromDirectory(path: target.directory, shallow: false)
+        let filesToProcess = try filesFromDirectory(path: target.directory, shallow: true)
         
         // Construct a build command for each source file with a particular suffix.
         return filesToProcess.compactMap {
