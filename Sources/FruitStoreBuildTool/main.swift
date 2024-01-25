@@ -19,7 +19,8 @@ print("from MyBuildPluginTool:", input)
 print("from MyBuildPluginTool:", output)
 var outputURL = URL(fileURLWithPath: output)
 
-let contentsOfFile = "//nothing of importance"
+let contentsOfInputFile = try String(contentsOf: URL(fileURLWithPath: input))
+let contentsOfFile = contentsOfInputFile
 
 try contentsOfFile.write(to: outputURL, atomically: true, encoding: .utf8)
 
