@@ -34,11 +34,14 @@ import XcodeProjectPlugin
 extension FruitStoreBuild: XcodeBuildToolPlugin {
     // Entry point for creating build commands for targets in Xcode projects.
     func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [Command] {
-        // Find the code generator tool to run (replace this with the actual one).
+        //Tool is named after the example tool
         let generatorTool = try context.tool(named: "my-code-generator")
         
-        // Construct a build command for each source file with a particular suffix.
-        return target.inputFiles.map(\.path).compactMap {
+        let dataDirectory = context.xcodeProject.directory.appending([target.displayName, "Data"])
+        let filesToProcess = try filesFromDirectory(path:dataDirectory)
+        
+        //Attempt to construct a build command for each file from the folder. Non txt files will be rejected.
+        return filesToProcess.compactMap {
             createBuildCommand(for: $0, in: context.pluginWorkDirectory, with: generatorTool.path)
         }
     }
