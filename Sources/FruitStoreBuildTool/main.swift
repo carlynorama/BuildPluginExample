@@ -5,6 +5,8 @@ if arguments.count < 4 {
     print("missing arguments")
 }
 
+print("STIIIIIIIIIILLLLLLLFINDDDMMMEEEEE")
+
 let (input, output) = (arguments[1], arguments[3])
 var outputURL = URL(fileURLWithPath: output)
 var inputURL = URL(fileURLWithPath: input)
