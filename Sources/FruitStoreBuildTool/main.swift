@@ -15,9 +15,12 @@ let fileBase = inputURL.deletingPathExtension().lastPathComponent
 let structName = fileBase.capitalized
 generatedCode.append(generateStruct(structName: structName))
 
-let contentsOfInputFile = try String(contentsOf: URL(fileURLWithPath: input)).trimmingCharacters(in: .whitespacesAndNewlines)
+//let contentsOfInputFile = try String(contentsOf: URL(fileURLWithPath: input)).trimmingCharacters(in: .whitespacesAndNewlines)
+//generatedCode.append(generateAddToFruitStore(base:fileBase, structName:structName, itemToAdd: contentsOfInputFile))
 
-generatedCode.append(generateAddToFruitStore(base:fileBase, structName:structName, itemToAdd: contentsOfInputFile))
+let itemsFromFile = try String(contentsOf: URL(fileURLWithPath: input)).split(separator: "\n")
+generatedCode.append(generateAddToFruitStore(base:fileBase, structName:structName, itemsToAdd: itemsFromFile))
+
 
 try generatedCode.write(to: outputURL, atomically: true, encoding: .utf8)
 
@@ -44,6 +47,21 @@ func generateAddToFruitStore(base:some StringProtocol, structName:some StringPro
     let \(base) = "\(itemToAdd)"
     func add\(base.capitalized)() {
         FruitStore["\(base)"] = [ \(structName)(name:"\\(\(base))")]
+    }
+    """
+}
+
+func generateAddToFruitStore(base:some StringProtocol, structName:some StringProtocol, itemsToAdd: [some StringProtocol]) -> String {
+    let initStrings = itemsToAdd.map { "\(structName)(name:\"\($0.capitalized)\")" }
+    let fruitArrayCode = "[\(initStrings.joined(separator: ","))]"
+    let insertCode = """
+        FruitStore["\(base)"] = \(fruitArrayCode)
+    """
+    return """
+    
+    let \(base) = "\(itemsToAdd.randomElement() ?? "No items in list")"
+    func add\(base.capitalized)() {
+         \(insertCode)
     }
     """
 }
