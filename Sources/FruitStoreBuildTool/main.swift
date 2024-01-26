@@ -5,22 +5,60 @@ if arguments.count < 4 {
     print("missing arguments")
 }
 
+let (input, output) = (arguments[1], arguments[3])
+var outputURL = URL(fileURLWithPath: output)
+var inputURL = URL(fileURLWithPath: input)
+
+var generatedCode = generateHeader()
+
+let fileBase = inputURL.deletingPathExtension().lastPathComponent
+let structName = fileBase.capitalized
+generatedCode.append(generateStruct(structName: structName))
+
+let contentsOfInputFile = try String(contentsOf: URL(fileURLWithPath: input)).trimmingCharacters(in: .whitespacesAndNewlines)
+
+generatedCode.append(generateAddToFruitStore(base:fileBase, structName:structName, itemToAdd: contentsOfInputFile))
+
+try generatedCode.write(to: outputURL, atomically: true, encoding: .utf8)
+
+func generateHeader() -> String {
+        """
+        import Foundation
+        
+        
+        """
+}
+
+func generateStruct(structName:some StringProtocol) -> String {
+    """
+    \n
+    struct \(structName):Fruit {
+        let name:String
+    }
+    """
+}
+
+func generateAddToFruitStore(base:some StringProtocol, structName:some StringProtocol, itemToAdd: some StringProtocol) -> String {
+    """
+    
+    let \(base) = "\(itemToAdd)"
+    func add\(base.capitalized)() {
+        FruitStore["\(base)"] = [ \(structName)(name:"\\(\(base))")]
+    }
+    """
+}
+
+
+//MARK: Old Prints Farm
+
+
+//Added for ease of scanning for our output.
+//print("FIIIIIIIIIIIIIINNNNNNNNNDDDMMMEEEEEEEEEEEEEEEEE")
+//print("from MyBuildPluginTool:", input)
+//print("from MyBuildPluginTool:", output)
+
 // print("ARGUMENTS")
 
 // arguments.forEach {
 //     print($0)
 // }
-
-let (input, output) = (arguments[1], arguments[3])
-
-//Added for ease of scanning for our output.
-print("FIIIIIIIIIIIIIINNNNNNNNNDDDMMMEEEEEEEEEEEEEEEEE")
-print("from MyBuildPluginTool:", input)
-print("from MyBuildPluginTool:", output)
-var outputURL = URL(fileURLWithPath: output)
-
-let contentsOfInputFile = try String(contentsOf: URL(fileURLWithPath: input))
-let contentsOfFile = contentsOfInputFile
-
-try contentsOfFile.write(to: outputURL, atomically: true, encoding: .utf8)
-
